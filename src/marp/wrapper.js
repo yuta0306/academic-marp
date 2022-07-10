@@ -6,9 +6,10 @@ async function override(filename, bibtex) {
     let referenced = {}
     await fs.readFile(filename, 'utf-8')
         .then(markdown => {
-            matched = markdown.match(/\[ref:.*\]\(.*\)/g)
+            matched = markdown.match(/\[ref:.*?\]\(.*?\)/g)
             data = markdown
         })
+
     let refs = matched.map(v => v.replace(/\[ref:|].*/g, ''))
     refs.map(v => {
         let hit = bibtex.filter(bib => v == bib.id)
@@ -24,10 +25,15 @@ async function override(filename, bibtex) {
     matched.map((v, i) => {
         let ref = refs[i]
         if (history.includes(ref)) {
+            let html
             let obj = v.replace(/\[.*\]|\(|\)/g, '')
             let attrs = obj.split(',').map(v => v.replace('\s+', ''))
-            let display = attrs.map(v => `${referenced[ref][v]}`).join(', ')
-            let html = `<span class="reference-item" data-ref-number="${history.indexOf(ref) + 1}">${display}</span>`
+            if ((attrs.length == 1) && (attrs[0] == 'index')) {
+                html = `<span class="reference-item--index-only" data-ref-number="${history.indexOf(ref) + 1}"></span>`
+            } else {
+                let display = attrs.map(v => `${referenced[ref][v]}`).join(', ')
+                html = `<span class="reference-item" data-ref-number="${history.indexOf(ref) + 1}">${display}</span>`
+            }
             data = data.replace(v, html)
         }
     })
