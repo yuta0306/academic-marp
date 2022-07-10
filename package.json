@@ -1,0 +1,24 @@
+{
+  "name": "academic-marp",
+  "version": "0.1.0",
+  "description": "",
+  "main": "src/cli.js",
+  "bin": {
+    "academic-marp": "./src/cli.js"
+  },
+  "keywords": [
+    "cli",
+    "marp",
+    "academic-marp"
+  ],
+  "author": "yuta0306",
+  "license": "MIT",
+  "dependencies": {
+    "@marp-team/marpit": "^2.3.1",
+    "argparse": "^2.0.1"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@marp-team/marp-cli": "^2.0.4"
+  }
+}
