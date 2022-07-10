@@ -12,6 +12,7 @@ const parser = new ArgumentParser({
 
 parser.add_argument('-f', '--file', { help: 'input .md file' })
 parser.add_argument('-b', '--bibtex', { help: 'input .bib file' })
+parser.add_argument('--theme', { help: 'theme', default: 'gaia' })
 
 const args = parser.parse_args()
 
@@ -19,7 +20,7 @@ const result = await parse(args.bibtex)
 
 const out = await override(args.file, result)
 
-const promise = marpCli(['tmp.md', '--pdf'])
+const promise = marpCli(['tmp.md', '--pdf', '--html=true', `--theme=${args.theme}`])
     .then((exitStatus) => {
         if (exitStatus > 0) {
             console.error(`Failure (Exit status: ${exitStatus})`)

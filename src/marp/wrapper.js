@@ -27,7 +27,7 @@ async function override(filename, bibtex) {
             let obj = v.replace(/\[.*\]|\(|\)/g, '')
             let attrs = obj.split(',').map(v => v.replace('\s+', ''))
             let display = attrs.map(v => `${referenced[ref][v]}`).join(', ')
-            let html = `<span data-ref-number="${history.indexOf(ref) + 1}">${display}</span>`
+            let html = `<span class="reference-item" data-ref-number="${history.indexOf(ref) + 1}">${display}</span>`
             data = data.replace(v, html)
         }
     })
