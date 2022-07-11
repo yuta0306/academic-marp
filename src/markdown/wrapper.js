@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
 
-async function override(filename, bibtex) {
+async function override(filename, bibtex, generate, per_slide) {
     let matched, data
     let history = []
     let referenced = {}
@@ -37,6 +37,16 @@ async function override(filename, bibtex) {
             data = data.replace(v, html)
         }
     })
+
+    if (generate) {
+        let slides = '\n\n---\n<!-- class: references -->\n# References\n\n'
+        history.map((v, i) => {
+            slides += `* <span class="reference-item" data-ref-number="${i + 1}">${referenced[v].title}, ${referenced[v].year}</span>\n`
+            if (i % per_slide) slides += "\n---\n\n"
+        })
+        slides += "\n"
+        data += slides
+    }
 
     const promise = fs.writeFile('./tmp.md', data, "utf-8")
     await promise

@@ -27,7 +27,7 @@ class Bibliography {
 
     fetch_attr() {
         // split
-        let normalized = this.bibtex.split(/{|}\s*,\s*|"\s*,\s*|"|}/)
+        let normalized = this.bibtex.split(/{|}\s*,|"\s*,|"|}/)
         let splited = normalized[1].split(/,/)
         // normalize text
         normalized = normalized.splice(0, 1).concat(splited).concat(normalized.splice(1, normalized.length))

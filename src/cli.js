@@ -4,7 +4,7 @@ import { marpCli } from '@marp-team/marp-cli'
 import { ArgumentParser } from 'argparse'
 import fs from 'fs'
 import parse from './bibtex/parse.js'
-import override from './marp/wrapper.js'
+import override from './markdown/wrapper.js'
 
 const parser = new ArgumentParser({
     description: 'Academic Marp CLI'
@@ -13,13 +13,15 @@ const parser = new ArgumentParser({
 parser.add_argument('-f', '--file', { help: 'input .md file' })
 parser.add_argument('-b', '--bibtex', { help: 'input .bib file' })
 parser.add_argument('--theme', { help: 'theme', default: 'gaia' })
+parser.add_argument('--generate', { default: false })
+parser.add_argument('--per-page', { default: 5 })
 parser.add_argument('-w', '--watch', { help: 'watch', default: false })
 
 const args = parser.parse_args()
 
 const result = await parse(args.bibtex)
 
-const out = await override(args.file, result)
+const out = await override(args.file, result, args.generate, args['per-page'])
 
 const promise = marpCli(['tmp.md', '--pdf', '--html=true', `--theme=${args.theme}`, `--watch=${args.watch}`])
     .then((exitStatus) => {
