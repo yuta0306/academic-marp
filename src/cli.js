@@ -12,6 +12,7 @@ const parser = new ArgumentParser({
 
 parser.add_argument('-f', '--file', { help: 'input .md file' })
 parser.add_argument('-b', '--bibtex', { help: 'input .bib file' })
+parser.add_argument('-o', '--output', { default: false })
 parser.add_argument('--theme', { help: 'theme', default: 'gaia' })
 parser.add_argument('--generate', { default: false })
 parser.add_argument('--per-page', { default: 5 })
@@ -23,7 +24,10 @@ const result = await parse(args.bibtex)
 
 const out = await override(args.file, result, args.generate, args['per-page'])
 
-const promise = marpCli(['tmp.md', '--pdf', '--html=true', `--theme=${args.theme}`, `--watch=${args.watch}`])
+let output = args.output
+if (!output) output = args.file.replace(/\.md/, '.pdf')
+
+const promise = marpCli(['tmp.md', '--pdf', `--output=${output}`, '--html=true', `--theme=${args.theme}`, `--watch=${args.watch}`])
     .then((exitStatus) => {
         if (exitStatus > 0) {
             console.error(`Failure (Exit status: ${exitStatus})`)
