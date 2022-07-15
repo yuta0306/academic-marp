@@ -10,6 +10,7 @@ async function override(filename, bibtex, generate, per_slide) {
             data = markdown
         })
 
+    if (matched == null) matched = []
     let refs = matched.map(v => v.replace(/\[ref:|].*/g, ''))
     refs.map(v => {
         let hit = bibtex.filter(bib => v == bib.id)
