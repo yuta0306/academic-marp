@@ -11,7 +11,7 @@ const parser = new ArgumentParser({
 })
 
 parser.add_argument('-f', '--file', { help: 'input .md file' })
-parser.add_argument('-b', '--bibtex', { help: 'input .bib file' })
+parser.add_argument('-b', '--bibtex', { default: null, help: 'input .bib file' })
 parser.add_argument('-o', '--output', { default: false })
 parser.add_argument('--theme', { help: 'theme', default: 'gaia' })
 parser.add_argument('--generate', { default: false })
@@ -20,14 +20,15 @@ parser.add_argument('-w', '--watch', { help: 'watch', default: false })
 
 const args = parser.parse_args()
 
-const result = await parse(args.bibtex)
+let result = []
+if (!args.bibtex == null) result = await parse(args.bibtex)
 
 const out = await override(args.file, result, args.generate, args['per-page'])
 
 let output = args.output
 if (!output) output = args.file.replace(/\.md/, '.pdf')
 
-const promise = marpCli(['tmp.md', '--pdf', `--output=${output}`, '--html=true', `--theme=${args.theme}`, `--watch=${args.watch}`])
+const promise = marpCli(['tmp.md', '--pdf', `--output=${output}`, '--html=true', `--theme=${args.theme}`, `--watch=${args.watch}`, '--allow-local-files=true'])
     .then((exitStatus) => {
         if (exitStatus > 0) {
             console.error(`Failure (Exit status: ${exitStatus})`)
