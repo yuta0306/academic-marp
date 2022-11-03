@@ -21,7 +21,7 @@ parser.add_argument('-w', '--watch', { help: 'watch', default: false })
 const args = parser.parse_args()
 
 let result = []
-if (!args.bibtex == null) result = await parse(args.bibtex)
+if (!(args.bibtex == null)) result = await parse(args.bibtex)
 
 const out = await override(args.file, result, args.generate, args['per-page'])
 

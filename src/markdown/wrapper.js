@@ -9,9 +9,11 @@ async function override(filename, bibtex, generate, per_slide) {
             matched = markdown.match(/\[ref:.*?\]\(.*?\)/g)
             data = markdown
         })
+    // console.log(matched)
 
     if (matched == null) matched = []
     let refs = matched.map(v => v.replace(/\[ref:|].*/g, ''))
+    // console.log(refs)
     refs.map(v => {
         let hit = bibtex.filter(bib => v == bib.id)
         if (hit.length > 0) {
@@ -23,6 +25,7 @@ async function override(filename, bibtex, generate, per_slide) {
             })
         }
     })
+
     matched.map((v, i) => {
         let ref = refs[i]
         if (history.includes(ref)) {
